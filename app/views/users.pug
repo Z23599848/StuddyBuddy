@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 Study Buddies Directory
+  .user-grid
+    each user in users
+      .user-card
+        h2= user.full_name
+        p 🎓 #{user.academic_level}
+        p 🏛️ #{user.department}, #{user.university}
+        a(href="/users/" + user.user_id) View Profile

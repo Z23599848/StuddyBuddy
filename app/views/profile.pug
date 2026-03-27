@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  .profile-container
+    h1= user.first_name + ' ' + user.last_name
+    p.subtext #{user.university} | #{user.department} | #{user.academic_level}
+    if user.bio
+      p.bio= user.bio
+
+    h2 Skills
+    if skills.length
+      ul.skill-tags
+        each s in skills
+          li= s.skill_name + ' (' + s.proficiency_level + ')'
+    else
+      p Not listed.
+
+    h2 Enrolled Courses
+    if courses.length
+      table
+        thead
+          tr
+            th Code
+            th Course Name
+            th Semester
+            th Year
+        tbody
+          each c in courses
+            tr
+              td= c.course_code
+              td= c.course_name
+              td= c.semester
+              td= c.year
+    else
+      p No courses found.
+
+  a.btn(href="/users") ← Back
