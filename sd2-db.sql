@@ -181,7 +181,6 @@ CREATE TABLE `follow` (
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`follower_id`, `following_id`),
   KEY `idx_follow_following_id` (`following_id`),
-  CONSTRAINT `chk_follow_not_self` CHECK (`follower_id` <> `following_id`),
   CONSTRAINT `fk_follow_follower`
     FOREIGN KEY (`follower_id`) REFERENCES `user` (`user_id`)
     ON DELETE CASCADE ON UPDATE CASCADE,
