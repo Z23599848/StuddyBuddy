@@ -6,14 +6,13 @@ html(lang="en")
     title= title + " | StudyBuddy"
     link(rel="stylesheet" href="/style.css")
   body
-    header
-      nav.navbar
-        a.brand(href="/") 📚 StudyBuddy
-        ul
-          li: a(href="/users") Browse Buddies
-          li: a(href="/sessions") Sessions
-          li: a(href="/tags") Topics
-    main.container
+    nav.navbar
+      a.brand(href="/") StudyBuddy
+      ul
+        li: a(href="/users") Browse Buddies
+        li: a(href="/sessions") Study Sessions
+        li: a(href="/tags") Topics
+    main
       block content
     footer
-      p Study smart, together. &copy; 2026 StudyBuddy
+      p &copy; 2026 StudyBuddy – Peer Support for Students

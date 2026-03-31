@@ -2,19 +2,18 @@ extends layout
 
 block content
   h1 Study Sessions
-  .filter-strip
-    a(href="/sessions") All
-    a(href="/tags") By Topic
+  p Join or browse available study sessions.
 
-  .grid
+  .filter-bar
+    a(href="/sessions") All Topics
+    a(href="/tags") Browse by Topic
+
+  .session-list
     each session in sessions
-      .card
-        .card-header
-          h2= session.topic
-        .card-body
-          p 📍 #{session.location || 'Location TBD'}
-          p 📅 #{new Date(session.scheduled_time).toLocaleString('en-GB')}
-          p 👤 #{session.first_name} #{session.last_name}
-          p 👥 #{session.joined}/#{session.max_participants || '∞'}
-        .card-footer
-          a.btn(href="/sessions/" + session.session_id) View →
+      .session-card
+        h2= session.topic
+        p 📍 Location: #{session.location || 'TBD'}
+        p 📅 #{new Date(session.scheduled_time).toLocaleString()}
+        p 👤 Organised by #{session.first_name} #{session.last_name}
+        p 👥 #{session.participant_count} / #{session.max_participants || '∞'} participants
+        a(href="/sessions/" + session.session_id) View Details

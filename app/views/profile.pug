@@ -23,6 +23,35 @@ block content
       if courses.length
         table
           thead
+  .profile-header
+    h1= user.first_name + ' ' + user.last_name
+    p.meta #{user.university} &mdash; #{user.department}
+    p.meta Academic Level: #{user.academic_level}
+    p.bio= user.bio
+
+  section
+    h2 Skills
+    if skills.length
+      ul.skill-list
+        each skill in skills
+          li
+            span.skill-name= skill.skill_name
+            span.level  (#{skill.proficiency_level})
+    else
+      p No skills listed yet.
+
+  section
+    h2 Enrolled Courses
+    if courses.length
+      table
+        thead
+          tr
+            th Code
+            th Course
+            th Semester
+            th Year
+        tbody
+          each c in courses
             tr
               th Code
               th Name
@@ -38,4 +67,4 @@ block content
       else
         p Not enrolled in any courses.
 
-  a.btn(href="/users") ← Back to Buddies
+  a.btn(href="/users") &larr; Back to All Buddies
