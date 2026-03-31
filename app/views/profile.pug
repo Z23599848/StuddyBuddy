@@ -1,41 +1,43 @@
 extends layout
 
 block content
-  .profile-header
+  .profile-wrapper
     h1= user.first_name + ' ' + user.last_name
-    p.meta #{user.university} &mdash; #{user.department}
-    p.meta Academic Level: #{user.academic_level}
-    p.bio= user.bio
+    .meta
+      p 🏫 #{user.university}
+      p 📚 #{user.department}
+      p 🎓 #{user.academic_level}
+    if user.bio
+      p.bio "#{user.bio}"
 
-  section
-    h2 Skills
-    if skills.length
-      ul.skill-list
-        each skill in skills
-          li
-            span.skill-name= skill.skill_name
-            span.level  (#{skill.proficiency_level})
-    else
-      p No skills listed yet.
+    section
+      h2 Skills
+      if skills.length
+        ul.skill-list
+          each s in skills
+            li #{s.skill_name}
+              span.level  – #{s.proficiency_level}
+      else
+        p No skills added yet.
 
-  section
-    h2 Enrolled Courses
-    if courses.length
-      table
-        thead
-          tr
-            th Code
-            th Course
-            th Semester
-            th Year
-        tbody
-          each c in courses
+    section
+      h2 Courses
+      if courses.length
+        table
+          thead
             tr
-              td= c.course_code
-              td= c.course_name
-              td= c.semester
-              td= c.year
-    else
-      p No courses found.
+              th Course Code
+              th Course Name
+              th Semester
+              th Year
+          tbody
+            each c in courses
+              tr
+                td= c.course_code
+                td= c.course_name
+                td= c.semester
+                td= c.year
+      else
+        p No courses enrolled.
 
-  a.btn(href="/users") &larr; Back to All Buddies
+  a.btn(href="/users") ← All Students
