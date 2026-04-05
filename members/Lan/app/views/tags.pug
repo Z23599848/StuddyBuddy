@@ -1,7 +1,0 @@
-extends layout
-
-block content
-  h1 Topics
-  .tags
-    each tag in tags
-      a.tag(href="/sessions?tag=" + encodeURIComponent(tag.tag))= tag.tag + ' (' + tag.n + ')'

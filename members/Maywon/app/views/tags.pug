@@ -1,9 +1,0 @@
-extends layout
-
-block content
-  h1 Browse by Topic
-  .tag-list
-    each tag in tags
-      a.tag-chip(href="/sessions?tag=" + encodeURIComponent(tag.tag))
-        | #{tag.tag}
-        span  (#{tag.session_count})
