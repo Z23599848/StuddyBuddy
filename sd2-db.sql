@@ -42,6 +42,7 @@ CREATE TABLE `user` (
   `password_hash` VARCHAR(255) NOT NULL,
   `academic_level` VARCHAR(100) NULL,
   `bio` TEXT NULL,
+  `study_preferences` TEXT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `uq_user_email` (`email`),
@@ -104,6 +105,20 @@ CREATE TABLE `user_skill` (
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_user_skill_skill`
     FOREIGN KEY (`skill_id`) REFERENCES `skill` (`skill_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `availability` (
+  `availability_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `day_of_week` VARCHAR(20) NOT NULL,
+  `start_time` TIME NOT NULL,
+  `end_time` TIME NOT NULL,
+  PRIMARY KEY (`availability_id`),
+  KEY `idx_availability_user_id` (`user_id`),
+  KEY `idx_availability_day_time` (`day_of_week`, `start_time`, `end_time`),
+  CONSTRAINT `fk_availability_user`
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -171,6 +186,32 @@ CREATE TABLE `session_participant` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE `session_rating` (
+  `rating_id` INT NOT NULL AUTO_INCREMENT,
+  `session_id` INT NOT NULL,
+  `rated_by` INT NOT NULL,
+  `rated_user_id` INT NOT NULL,
+  `score` TINYINT NOT NULL,
+  `feedback` TEXT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`rating_id`),
+  UNIQUE KEY `uq_rating_once` (`session_id`, `rated_by`, `rated_user_id`),
+  KEY `idx_session_rating_session_id` (`session_id`),
+  KEY `idx_session_rating_rated_by` (`rated_by`),
+  KEY `idx_session_rating_rated_user_id` (`rated_user_id`),
+  CONSTRAINT `fk_session_rating_session`
+    FOREIGN KEY (`session_id`) REFERENCES `study_session` (`session_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_session_rating_rated_by`
+    FOREIGN KEY (`rated_by`) REFERENCES `user` (`user_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_session_rating_rated_user`
+    FOREIGN KEY (`rated_user_id`) REFERENCES `user` (`user_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `chk_session_rating_score`
+    CHECK (`score` BETWEEN 1 AND 5)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 -- --------------------------------------------------------
 -- SOCIAL FOLLOW SYSTEM
 -- --------------------------------------------------------
@@ -187,6 +228,28 @@ CREATE TABLE `follow` (
   CONSTRAINT `fk_follow_following`
     FOREIGN KEY (`following_id`) REFERENCES `user` (`user_id`)
     ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `study_request` (
+  `request_id` INT NOT NULL AUTO_INCREMENT,
+  `requester_id` INT NOT NULL,
+  `receiver_id` INT NOT NULL,
+  `message` TEXT NULL,
+  `status` VARCHAR(20) NOT NULL DEFAULT 'pending',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `responded_at` DATETIME NULL,
+  PRIMARY KEY (`request_id`),
+  KEY `idx_study_request_requester_id` (`requester_id`),
+  KEY `idx_study_request_receiver_id` (`receiver_id`),
+  KEY `idx_study_request_status` (`status`),
+  CONSTRAINT `fk_study_request_requester`
+    FOREIGN KEY (`requester_id`) REFERENCES `user` (`user_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_study_request_receiver`
+    FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `chk_study_request_status`
+    CHECK (`status` IN ('pending', 'accepted', 'rejected', 'cancelled'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------

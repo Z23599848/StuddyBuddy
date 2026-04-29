@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1 Conversation
+  if otherParticipants.length
+    p With #{otherParticipants.map(function (user) { return user.first_name + ' ' + user.last_name; }).join(', ')}
+
+  if errors && errors.length
+    ul.error-list
+      each error in errors
+        li= error
+
+  .message-thread
+    if messages.length
+      each message in messages
+        .message-bubble(class=(Number(message.sender_id) === Number(currentUser.user_id) ? 'message-own' : ''))
+          strong= message.first_name + ' ' + message.last_name
+          p= message.content
+          span= new Date(message.sent_at).toLocaleString()
+    else
+      p No messages yet.
+
+  form.form-panel(action="/messages/" + conversation.conversation_id method="post")
+    label.full-width
+      span Message
+      textarea(name="content" rows="3" required)
+    button.btn(type="submit") Send
+
+  a.btn(href="/messages") Back to Messages

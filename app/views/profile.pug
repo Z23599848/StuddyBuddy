@@ -3,9 +3,43 @@ extends layout
 block content
   .profile-header
     h1= user.first_name + ' ' + user.last_name
-    p.meta #{user.university} &mdash; #{user.department}
-    p.meta Academic Level: #{user.academic_level}
-    p.bio= user.bio
+    p.meta #{user.university} - #{user.department}
+    p.meta Academic Level: #{user.academic_level || 'Not set'}
+    p.meta Rating: #{user.rating_average || '0'} / 5 from #{user.rating_count || 0} ratings
+    p.meta Points: #{user.points || 0}
+    if user.bio
+      p.bio= user.bio
+    if user.study_preferences
+      p.bio= user.study_preferences
+    if currentUser && Number(currentUser.user_id) === Number(user.user_id)
+      a.btn(href="/profile/edit") Edit Profile
+
+  if currentUser && Number(currentUser.user_id) !== Number(user.user_id)
+    section.form-panel
+      if connected
+        h2 Connected Study Buddy
+        p You can message this student because a study request has been accepted.
+        form(action="/messages/start/" + user.user_id method="post")
+          button.btn(type="submit") Open Conversation
+      else if activeRequest
+        h2 Study Request
+        p Your #{activeRequest.status} request is already active.
+      else if reverseActiveRequest
+        h2 Study Request
+        p This student already sent you a #{reverseActiveRequest.status} request.
+        a.btn(href="/requests") Review Requests
+      else
+        h2 Send Study Request
+        form(action="/users/" + user.user_id + "/request" method="post")
+          label.full-width
+            span Message
+            textarea(name="message" rows="3" required) Hi #{user.first_name}, would you like to study together?
+          button.btn(type="submit") Send Request
+  else if !currentUser
+    section.form-panel
+      h2 Study Request
+      p Log in to send this student a study request.
+      a.btn(href="/login") Login
 
   section
     h2 Skills
@@ -14,7 +48,7 @@ block content
         each skill in skills
           li
             span.skill-name= skill.skill_name
-            span.level  (#{skill.proficiency_level})
+            span.level  (#{skill.proficiency_level || 'Not set'})
     else
       p No skills listed yet.
 
@@ -38,4 +72,26 @@ block content
     else
       p No courses found.
 
-  a.btn(href="/users") &larr; Back to All Buddies
+  section
+    h2 Availability
+    if availability.length
+      ul.plain-list
+        each slot in availability
+          li #{slot.day_of_week}: #{slot.start_time} to #{slot.end_time}
+    else
+      p No availability listed yet.
+
+  section
+    h2 Ratings
+    if ratings.length
+      .review-list
+        each rating in ratings
+          .review-card
+            strong #{rating.score} / 5
+            span  from #{rating.reviewer_first_name} #{rating.reviewer_last_name} for #{rating.topic}
+            if rating.feedback
+              p= rating.feedback
+    else
+      p No ratings yet.
+
+  a.btn(href="/users") Back to All Buddies

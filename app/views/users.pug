@@ -11,4 +11,6 @@ block content
         p.dept= user.department
         p.uni= user.university
         p.level Academic Level: #{user.academic_level}
+        p Rating: #{user.rating_average || 0} / 5
+        p Points: #{user.points || 0}
         a(href="/users/" + user.user_id) View Profile

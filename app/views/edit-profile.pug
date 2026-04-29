@@ -1,0 +1,102 @@
+extends layout
+
+block content
+  h1 Edit Profile
+  p Keep your study details current so matching can work properly.
+
+  if errors && errors.length
+    ul.error-list
+      each error in errors
+        li= error
+
+  .two-column
+    section.form-panel
+      h2 Profile Details
+      form(action="/profile/edit" method="post")
+        .form-grid
+          label
+            span University
+            select(name="university_id" required)
+              option(value="") Choose university
+              each university in universities
+                option(value=university.university_id selected=(String(user.university_id || '') === String(university.university_id)))= university.name
+          label
+            span Department
+            select(name="department_id" required)
+              option(value="") Choose department
+              each department in departments
+                option(value=department.department_id selected=(String(user.department_id || '') === String(department.department_id))) #{department.name} - #{department.university_name}
+          label
+            span Academic level
+            input(type="text" name="academic_level" value=user.academic_level)
+          label
+            span Add skill
+            input(type="text" name="skill_name" list="skill-options")
+            datalist#skill-options
+              each skill in skillOptions
+                option(value=skill.skill_name)
+          label
+            span Proficiency
+            select(name="proficiency_level")
+              option(value="") Choose level
+              option(value="Beginner") Beginner
+              option(value="Intermediate") Intermediate
+              option(value="Advanced") Advanced
+          label
+            span Course code
+            input(type="text" name="course_code" placeholder="CMP-N204-0")
+          label
+            span Course name
+            input(type="text" name="course_name" placeholder="Software Engineering")
+          label
+            span Semester
+            input(type="text" name="semester" placeholder="Spring")
+          label
+            span Year
+            input(type="text" name="year" placeholder="2026")
+        label.full-width
+          span Bio
+          textarea(name="bio" rows="4")= user.bio || ''
+        label.full-width
+          span Study preferences
+          textarea(name="study_preferences" rows="3")= user.study_preferences || ''
+
+        h2 Availability
+        - const availabilityRows = availability && availability.length ? availability : [{}, {}, {}]
+        .availability-list
+          each slot in availabilityRows
+            .availability-row
+              select(name="day_of_week")
+                option(value="") Day
+                each day in days
+                  option(value=day selected=(slot.day_of_week === day))= day
+              input(type="time" name="start_time" value=(slot.start_time ? slot.start_time.toString().slice(0, 5) : ''))
+              input(type="time" name="end_time" value=(slot.end_time ? slot.end_time.toString().slice(0, 5) : ''))
+          .availability-row
+            select(name="day_of_week")
+              option(value="") Day
+              each day in days
+                option(value=day)= day
+            input(type="time" name="start_time")
+            input(type="time" name="end_time")
+
+        button.btn(type="submit") Save Profile
+
+    aside.info-panel
+      h2 Current Skills
+      if skills.length
+        ul.skill-list
+          each skill in skills
+            li
+              span.skill-name= skill.skill_name
+              span.level  (#{skill.proficiency_level || 'Not set'})
+      else
+        p No skills listed yet.
+
+      h2 Current Courses
+      if courses.length
+        ul.plain-list
+          each course in courses
+            li #{course.course_code} - #{course.course_name}
+      else
+        p No courses listed yet.

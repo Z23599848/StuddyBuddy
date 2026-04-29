@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "supervisor index.js",
-    "check": "node --check index.js && node --check app/app.js && node --check app/models/userModel.js && node --check app/models/sessionModel.js && node --check app/models/tagModel.js && node --check app/services/db.js",
+    "check": "node --check index.js && node --check app/app.js && node --check app/models/userModel.js && node --check app/models/sessionModel.js && node --check app/models/tagModel.js && node --check app/models/matchModel.js && node --check app/models/requestModel.js && node --check app/models/messageModel.js && node --check app/models/ratingModel.js && node --check app/models/schemaModel.js && node --check app/services/db.js && node --check app/utils/password.js && node --check app/utils/validation.js",
     "test": "npm run check"
   },
   "author": "",
@@ -13,6 +13,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-session": "^1.18.1",
     "mysql2": "^3.22.3",
     "pug": "^3.0.2",
     "supervisor": "^0.12.0"

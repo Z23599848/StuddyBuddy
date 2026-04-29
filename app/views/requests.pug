@@ -1,0 +1,49 @@
+extends layout
+
+block content
+  h1 Study Requests
+  p Send, accept, reject, or cancel requests from one place.
+
+  .two-column
+    section
+      h2 Incoming
+      if incoming.length
+        .request-list
+          each request in incoming
+            .request-card
+              h3
+                a(href="/users/" + request.other_user_id)= request.first_name + ' ' + request.last_name
+              p.status Status: #{request.status}
+              if request.message
+                p= request.message
+              if request.status === 'pending'
+                .button-row
+                  form(action="/requests/" + request.request_id + "/accept" method="post")
+                    button.btn(type="submit") Accept
+                  form(action="/requests/" + request.request_id + "/reject" method="post")
+                    button.btn.btn-muted(type="submit") Reject
+              else if request.status === 'accepted'
+                form(action="/messages/start/" + request.other_user_id method="post")
+                  button.btn(type="submit") Message
+      else
+        p No incoming requests.
+
+    section
+      h2 Outgoing
+      if outgoing.length
+        .request-list
+          each request in outgoing
+            .request-card
+              h3
+                a(href="/users/" + request.other_user_id)= request.first_name + ' ' + request.last_name
+              p.status Status: #{request.status}
+              if request.message
+                p= request.message
+              if request.status === 'pending'
+                form(action="/requests/" + request.request_id + "/cancel" method="post")
+                  button.btn.btn-muted(type="submit") Cancel
+              else if request.status === 'accepted'
+                form(action="/messages/start/" + request.other_user_id method="post")
+                  button.btn(type="submit") Message
+      else
+        p No outgoing requests.

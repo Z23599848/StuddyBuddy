@@ -20,6 +20,16 @@ These notes are not a final submission. Use them to write your own Sprint 4 repo
 - Sprint 3 demo defects fixed:
   - Session list now returns `participant_count`, matching `sessions.pug`.
   - Session detail now returns `creator_id`, matching `session-detail.pug`.
+- Sprint 4 MVC features are now implemented:
+  - US1 registration with server-side validation and password hashing.
+  - US2 login and US22 logout using Express sessions.
+  - US3 validation helpers for auth, profile, availability, requests, messages, and ratings.
+  - US4/US5 profile create/update fields for bio, preferences, skills, courses, and availability.
+  - US6 availability storage and display.
+  - Basic matching at `/matches` using shared courses, skills, department, and overlapping availability.
+  - US10-US13 study requests at `/requests` with send, accept, reject, and cancel actions.
+  - US14 messaging at `/messages` for accepted study buddies.
+  - Ratings/points through completed-session ratings and profile/user list summaries.
 
 ## Sprint 4 User Stories To Prioritise
 

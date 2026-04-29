@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 Login
+  p Access your profile, matches, requests, and messages.
+
+  if errors && errors.length
+    ul.error-list
+      each error in errors
+        li= error
+
+  form.form-panel.narrow-form(action="/login" method="post")
+    label
+      span Email
+      input(type="email" name="email" value=values.email required)
+    label
+      span Password
+      input(type="password" name="password" required)
+    button.btn(type="submit") Login
+    p.form-note Seeded demo accounts use password123.

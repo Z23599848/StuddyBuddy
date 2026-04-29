@@ -4,5 +4,20 @@ block content
   section.hero
     h1 Welcome to StudyBuddy
     p Connect with fellow students, find study partners and join study sessions.
-    a.btn(href="/users") Browse Study Buddies
-    a.btn.btn-outline(href="/sessions") View Sessions
+    if currentUser
+      a.btn(href="/matches") View Matches
+      a.btn.btn-outline(href="/profile/edit") Update Profile
+    else
+      a.btn(href="/register") Create Account
+      a.btn.btn-outline(href="/login") Login
+
+  section.feature-grid
+    article.feature-card
+      h2 Find compatible students
+      p Matching uses shared courses, skills, department, and overlapping availability.
+    article.feature-card
+      h2 Manage study requests
+      p Send requests, respond to incoming requests, and keep track of accepted study buddies.
+    article.feature-card
+      h2 Plan together
+      p Accepted study buddies can message each other and rate completed study sessions.

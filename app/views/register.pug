@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  h1 Create Account
+  p Join StudyBuddy with validated registration details.
+
+  if errors && errors.length
+    ul.error-list
+      each error in errors
+        li= error
+
+  form.form-panel(action="/register" method="post")
+    .form-grid
+      label
+        span First name
+        input(type="text" name="first_name" value=values.first_name required)
+      label
+        span Last name
+        input(type="text" name="last_name" value=values.last_name required)
+      label
+        span Email
+        input(type="email" name="email" value=values.email required)
+      label
+        span Academic level
+        input(type="text" name="academic_level" value=values.academic_level placeholder="Year 2")
+      label
+        span Password
+        input(type="password" name="password" minlength="8" required)
+      label
+        span Confirm password
+        input(type="password" name="password_confirm" minlength="8" required)
+      label
+        span University
+        select(name="university_id" required)
+          option(value="") Choose university
+          each university in universities
+            option(value=university.university_id selected=(String(values.university_id || '') === String(university.university_id)))= university.name
+      label
+        span Department
+        select(name="department_id" required)
+          option(value="") Choose department
+          each department in departments
+            option(value=department.department_id selected=(String(values.department_id || '') === String(department.department_id))) #{department.name} - #{department.university_name}
+    label.full-width
+      span Bio
+      textarea(name="bio" rows="4")= values.bio || ''
+    label.full-width
+      span Study preferences
+      textarea(name="study_preferences" rows="3")= values.study_preferences || ''
+    button.btn(type="submit") Register

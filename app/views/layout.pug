@@ -12,7 +12,20 @@ html(lang="en")
         li: a(href="/users") Browse Buddies
         li: a(href="/sessions") Study Sessions
         li: a(href="/tags") Topics
+        if currentUser
+          li: a(href="/matches") Matches
+          li: a(href="/requests") Requests
+          li: a(href="/messages") Messages
+          li: a(href="/profile") My Profile
+          li
+            form.nav-form(action="/logout" method="post")
+              button.nav-link(type="submit") Logout
+        else
+          li: a(href="/login") Login
+          li: a(href="/register") Register
     main
+      if flash
+        .flash(class="flash-" + flash.type)= flash.message
       block content
     footer
-      p &copy; 2026 StudyBuddy – Peer Support for Students
+      p &copy; 2026 StudyBuddy - Peer Support for Students

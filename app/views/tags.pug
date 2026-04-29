@@ -8,4 +8,4 @@ block content
     each tag in tags
       a.tag-pill(href="/sessions?tag=" + encodeURIComponent(tag.tag))
         span.tag-name= tag.tag
-        span.tag-count  (#{tag.count})
+        span.tag-count  (#{tag.total})

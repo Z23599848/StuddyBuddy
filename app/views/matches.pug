@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 Study Matches
+  p Matches are ranked by shared courses, shared skills, overlapping availability, and department.
+
+  .match-list
+    each match in matches
+      .match-card
+        .match-score
+          strong= match.match_score
+          span points
+        .match-body
+          h2= match.first_name + ' ' + match.last_name
+          p.meta #{match.university} - #{match.department}
+          p Academic Level: #{match.academic_level || 'Not set'}
+          ul.match-breakdown
+            li Shared courses: #{match.shared_courses}
+            li Shared skills: #{match.shared_skills}
+            li Overlapping availability: #{match.shared_availability}
+            li Same department: #{match.same_department ? 'Yes' : 'No'}
+          a.btn(href="/users/" + match.user_id) View Profile
+    else
+      p No matches found yet. Add courses, skills, and availability to improve your results.

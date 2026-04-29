@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h1 Messages
+  p Message students after a study request has been accepted.
+
+  .two-column
+    section
+      h2 Conversations
+      if conversations.length
+        .conversation-list
+          each conversation in conversations
+            a.conversation-card(href="/messages/" + conversation.conversation_id)
+              strong= conversation.first_name + ' ' + conversation.last_name
+              if conversation.latest_message
+                span= conversation.latest_message
+              else
+                span No messages yet.
+      else
+        p No conversations yet.
+
+    section
+      h2 Accepted Study Buddies
+      if connections.length
+        .request-list
+          each connection in connections
+            .request-card
+              h3= connection.first_name + ' ' + connection.last_name
+              form(action="/messages/start/" + connection.other_user_id method="post")
+                button.btn(type="submit") Open Conversation
+      else
+        p Accept a study request before messaging.
