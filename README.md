@@ -4,7 +4,9 @@
 Studdy buddy is a group software engineering project designed to support university students in organising their study activities, connecting with peers, and improving collaboration and wellbeing.
 
 ## Project Status
-This project is currently in **Sprint 2**, focusing on planning, analysis, and development environment setup.
+This project has completed Sprint 3 database-driven browsing pages and is being prepared for Sprint 4 MVP completion.
+
+Sprint 4 should focus on authentication, profile editing, availability, matching, study requests, messaging, ratings, Docker evidence, and GitHub Actions evidence. See `sprint4-notes.md` for the current Sprint 4 checklist.
 
 ## Technologies
 - Node.js
@@ -17,8 +19,20 @@ This project is currently in **Sprint 2**, focusing on planning, analysis, and d
 The project uses Docker to provide a consistent cross-platform development environment.
 All group members are able to run the application locally using Docker.
 
+Before running Docker Compose locally, copy `env-sample` to `.env` and keep `.env` private.
+
+```bash
+docker compose up --build
+```
+
 ## Repository
 This repository is used for group collaboration, version control, and sprint-based development.
+
+## Continuous Integration
+
+Sprint 4 CI evidence is provided through `.github/workflows/ci.yml`.
+
+The workflow runs JavaScript syntax checks with `npm test` and verifies that the web image can be built with Docker.
 
 ---
 

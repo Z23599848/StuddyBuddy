@@ -1,20 +1,18 @@
 # Base image to use
-FROM node:latest
+FROM node:22-alpine
 
-# set a working directory
+# Set a working directory
 WORKDIR /src
 
-# Copy across project configuration information
-# Install application dependencies
-COPY package*.json /src/
+# Copy project configuration and install dependencies
+COPY package*.json ./
+RUN npm ci
 
-# Ask npm to install the dependencies
-RUN npm install -g supervisor && npm install && npm install supervisor
-
-# Copy across all our files
-COPY . /src
+# Copy application files
+COPY . .
 
 # Expose our application port (3000)
 EXPOSE 3000
 
+CMD ["npm", "start"]
 

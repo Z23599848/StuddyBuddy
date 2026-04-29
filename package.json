@@ -5,17 +5,16 @@
   "main": "index.js",
   "scripts": {
     "start": "supervisor index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check": "node --check index.js && node --check app/app.js && node --check app/models/userModel.js && node --check app/models/sessionModel.js && node --check app/models/tagModel.js && node --check app/services/db.js",
+    "test": "npm run check"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mysql": "^2.18.1",
-    "mysql2": "^2.3.0",
+    "mysql2": "^3.22.3",
     "pug": "^3.0.2",
-    "sqlite3": "^5.0.2",
     "supervisor": "^0.12.0"
   }
 }
