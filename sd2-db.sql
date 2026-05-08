@@ -94,6 +94,19 @@ CREATE TABLE `skill` (
   UNIQUE KEY `uq_skill_name` (`skill_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE `topic` (
+  `topic_id` INT NOT NULL AUTO_INCREMENT,
+  `topic_name` VARCHAR(255) NOT NULL,
+  `created_by` INT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`topic_id`),
+  UNIQUE KEY `uq_topic_name` (`topic_name`),
+  KEY `idx_topic_created_by` (`created_by`),
+  CONSTRAINT `fk_topic_created_by`
+    FOREIGN KEY (`created_by`) REFERENCES `user` (`user_id`)
+    ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE `user_skill` (
   `user_id` INT NOT NULL,
   `skill_id` INT NOT NULL,
