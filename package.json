@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "supervisor index.js",
-    "check": "node --check index.js && node --check app/app.js && node --check app/models/userModel.js && node --check app/models/sessionModel.js && node --check app/models/tagModel.js && node --check app/models/matchModel.js && node --check app/models/requestModel.js && node --check app/models/messageModel.js && node --check app/models/ratingModel.js && node --check app/models/schemaModel.js && node --check app/services/db.js && node --check app/utils/password.js && node --check app/utils/validation.js",
+    "check": "node --check index.js && node --check app/app.js && node --check app/routes/index.js && node --check app/routes/helpers.js && node --check app/routes/homeRoutes.js && node --check app/routes/authRoutes.js && node --check app/routes/profileRoutes.js && node --check app/routes/userRoutes.js && node --check app/routes/sessionRoutes.js && node --check app/routes/tagRoutes.js && node --check app/routes/matchRoutes.js && node --check app/routes/requestRoutes.js && node --check app/routes/messageRoutes.js && node --check app/models/userModel.js && node --check app/models/sessionModel.js && node --check app/models/tagModel.js && node --check app/models/matchModel.js && node --check app/models/requestModel.js && node --check app/models/messageModel.js && node --check app/models/ratingModel.js && node --check app/models/schemaModel.js && node --check app/services/db.js && node --check app/utils/password.js && node --check app/utils/validation.js",
     "test": "npm run check"
   },
   "author": "",
