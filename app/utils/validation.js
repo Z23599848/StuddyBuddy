@@ -150,6 +150,18 @@ function validateMessage(body) {
   return { values, errors };
 }
 
+function validateTopic(body) {
+  const values = {
+    topic_name: text(body.topic_name)
+  };
+  const errors = [];
+
+  if (!values.topic_name) errors.push('Topic name is required.');
+  if (!hasMaxLength(values.topic_name, 255)) errors.push('Topic name must be 255 characters or fewer.');
+
+  return { values, errors };
+}
+
 function validateRating(body) {
   const values = {
     rated_user_id: text(body.rated_user_id),
@@ -173,5 +185,6 @@ module.exports = {
   validateAvailability,
   validateStudyRequest,
   validateMessage,
+  validateTopic,
   validateRating
 };

@@ -74,6 +74,13 @@ INSERT IGNORE INTO study_session (session_id, created_by, topic, location, sched
 (4, 4, 'HTML/CSS',   'Café',           '2026-04-04 13:00:00', 3),
 (5, 5, 'JavaScript', 'Library Study Pod', '2026-04-05 15:00:00', 4);
 
+-- Topics
+INSERT IGNORE INTO topic (topic_name, created_by) VALUES
+('JavaScript', 1),
+('MySQL', 2),
+('Docker', 3),
+('HTML/CSS', 4);
+
 -- Session Participants
 INSERT IGNORE INTO session_participant (session_id, user_id, status) VALUES
 (1, 2, 'joined'), (1, 3, 'joined'),
