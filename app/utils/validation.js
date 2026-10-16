@@ -107,8 +107,9 @@ function validateAvailability(body) {
       errors.push('Availability day must be valid.');
       continue;
     }
-    if (!/^\d{2}:\d{2}$/.test(start) || !/^\d{2}:\d{2}$/.test(end)) {
-      errors.push('Availability times must use HH:MM format.');
+    const clockTime = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+    if (!clockTime.test(start) || !clockTime.test(end)) {
+      errors.push('Availability times must be valid 24-hour times in HH:MM format.');
       continue;
     }
     if (start >= end) {
