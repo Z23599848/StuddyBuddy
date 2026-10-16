@@ -1,263 +1,96 @@
 # StudyBuddy
 
-## Project Overview
-StudyBuddy is a group software engineering project designed to support university students in organising their study activities, connecting with peers, and improving collaboration and wellbeing.
+[![StudyBuddy CI](https://github.com/Z23599848/StuddyBuddy/actions/workflows/ci.yml/badge.svg)](https://github.com/Z23599848/StuddyBuddy/actions/workflows/ci.yml)
 
-## Project Status
-This project has completed the Sprint 4 MVC implementation. The app now includes the Sprint 3 database-driven browsing pages plus authentication, profile editing, availability, matching, study requests, messaging, ratings, Docker support, and GitHub Actions CI.
+A university group project that helps students find study partners, coordinate availability, and organise peer learning. Built with Node.js, Express, Pug, and MySQL, with Docker Compose for local development.
 
-See `sprint4-notes.md` for the Sprint 4 evidence checklist and implementation summary.
+[Run locally](#run-locally) · [How matching works](#how-matching-works) · [Development](#development) · [Project records](#project-records)
 
-## Sprint 4 Features
+## What it does
 
-| Feature | Status |
-| --- | --- |
-| Real GitHub Actions CI | Done |
-| Docker working with MySQL and seed import | Done |
-| Dependency/security cleanup | Done |
-| Sprint 3 route bugs fixed | Done |
-| US1 Registration | Done |
-| US2 Login | Done |
-| US22 Logout | Done |
-| US3 Input validation | Done |
-| US4/US5 Profile create/update | Done |
-| US6 Availability | Done |
-| Basic matching algorithm | Done |
-| US10-US13 Study requests | Done |
-| US14 Messaging | Done |
-| Ratings/points | Done |
+- **Student profiles:** register, sign in, and edit courses, skills, study preferences, and weekly availability.
+- **Study partner discovery:** browse students or view ranked matches based on shared courses, skills, department, and overlapping availability.
+- **Study requests:** send, accept, reject, or cancel requests to connect with another student.
+- **Messaging:** exchange messages after a study request is accepted.
+- **Sessions and feedback:** browse study sessions by topic and rate fellow participants after a completed session.
 
-## Current Application Routes
+The application uses server-rendered Pug views, Express routes, model modules for database access, and a MySQL schema with sample data.
 
-- `/` - home page
-- `/register` - account registration
-- `/login` - account login
-- `/profile` and `/profile/edit` - current user profile and edit form
-- `/users` and `/users/:id` - browse students and view profiles
-- `/matches` - ranked study buddy matches
-- `/requests` - incoming and outgoing study requests
-- `/messages` and `/messages/:id` - accepted-buddy conversations
-- `/sessions` and `/sessions/:id` - study session list, detail, and ratings
-- `/tags` - topic browsing
+## Run locally
 
-## Technologies
-- Node.js
-- Express.js
-- MySQL
-- Docker
-- PhpMyAdmin
+Install Git and Docker with Docker Compose, then run:
 
-## Development Environment
-The project uses Docker to provide a consistent cross-platform development environment.
-All group members are able to run the application locally using Docker.
-
-Before running Docker Compose locally, copy `env-sample` to `.env` and keep `.env` private.
-
-```bash
+```sh
+git clone https://github.com/Z23599848/StuddyBuddy.git
+cd StuddyBuddy
+cp env-sample .env
 docker compose up --build
 ```
 
-The app runs at `http://127.0.0.1:3000/`.
-PhpMyAdmin runs at `http://127.0.0.1:8081/`.
+The copy command also works in PowerShell. Keep `.env` private; the sample settings are intended for local development.
 
-Seeded demo users can log in with password `password123`, for example:
+- **Application:** <http://127.0.0.1:3000/>
+- **Database browser (phpMyAdmin):** <http://127.0.0.1:8081/>
+- **MySQL from the host:** port `3308`
 
-- `ali@uni.ac.uk`
-- `nilay@uni.ac.uk`
-- `lan@uni.ac.uk`
-- `maywon@uni.ac.uk`
-- `tavishi@uni.ac.uk`
+Wait for MySQL to initialise before opening the application. The schema and seed data are imported when MySQL first creates its data directory; existing local data in `db/` is retained across restarts.
 
-## Local Checks
+For a local demonstration, sign in as `ali@uni.ac.uk` or `nilay@uni.ac.uk` with password `password123`. These are seeded demo accounts.
 
-```bash
+Stop the containers with:
+
+```sh
+docker compose down
+```
+
+## How matching works
+
+Matches use a weighted SQL score:
+
+```text
+score = 3 × shared courses
+      + 2 × shared skills
+      + overlapping availability pairs
+      + 1 if both students share a department
+```
+
+Higher scores appear first, followed by shared courses, shared skills, and first name to resolve ties. The implementation is in [matchModel.js](app/models/matchModel.js).
+
+## Development
+
+Use Node.js 22 to match the Docker image and CI environment. To install dependencies and run the available checks:
+
+```sh
+npm ci
 npm test
 npm audit --omit=dev
 ```
 
-## Repository
-This repository is used for group collaboration, version control, and sprint-based development.
+`npm test` checks JavaScript syntax and runs the availability validation tests. These checks do not cover the complete application or replace testing user journeys against MySQL. [GitHub Actions](.github/workflows/ci.yml) also audits production dependencies and builds the web Docker image.
 
-## Continuous Integration
+| Location | Purpose |
+| --- | --- |
+| [app/app.js](app/app.js) | Routes, authentication, and request handling |
+| [app/models/](app/models/) | Database queries and matching logic |
+| [app/views/](app/views/) | Pug page templates |
+| [app/utils/](app/utils/) | Input validation and password helpers |
+| [static/](static/) | Styles and static assets |
+| [sd2-db.sql](sd2-db.sql), [seed-data.sql](seed-data.sql) | Database schema and demonstration data |
+| [test/](test/) | Automated validation tests |
 
-Sprint 4 CI evidence is provided through `.github/workflows/ci.yml`.
+## Status and limitations
 
-The workflow runs JavaScript syntax checks and availability validation tests with `npm test`, checks production dependency security with `npm audit --omit=dev`, and verifies that the web image can be built with Docker.
+The repository contains the Sprint 4 MVC implementation and is intended as a local coursework demonstration. Real-time chat, email verification, notifications, and moderation tools are outside the current scope.
 
----
+The development configuration includes demo credentials, an in-memory session store, and a fallback session secret. A public deployment would require separate configuration and security work, including persistent session storage and deployment-specific secrets.
 
-## Sprint 1 – Ethical Considerations (Individual Contribution)
-During Sprint 1, my individual responsibility was to identify and analyse the key ethical issues relevant to the StudyBuddy project.
+## Project records
 
-The ethical considerations addressed include:
+StudyBuddy is a collaborative project by **Ali, Lan, Maywon, Nilay, and Tavishi**. The [submission checklist](submission-checklist.md) and [meeting records](meetings/) document the team and its work; this repository should be read as a group project.
 
-- **Data privacy and protection:**  
-  Ensuring that personal and academic data is handled securely, stored responsibly, and processed in compliance with GDPR principles such as data minimisation, purpose limitation, and user rights.
+- [Design artefacts](design/): requirements, user stories, diagrams, and wireframe records.
+- [Sprint 4 implementation notes](sprint4-notes.md): features and evidence checklist.
+- [Original README and coursework history](docs/coursework-history.md): the complete former README, including the original individual-contribution narrative and sprint submission material.
+- [Code of conduct](CODE_OF_CONDUCT.md).
 
-- **Informed consent and transparency:**  
-  Providing clear and accessible information to users regarding what data is collected, how it is used, and how long it is retained, enabling informed decision-making.
-
-- **Accessibility and inclusivity:**  
-  Designing the system to be usable by students with diverse needs, including consideration of accessibility standards and avoidance of exclusionary design practices.
-
-- **Fairness and bias:**  
-  Reducing the risk of bias in system design and future algorithmic features, particularly in recommendation or prioritisation mechanisms.
-
-- **Ethical collaboration and wellbeing:**  
-  Promoting respectful communication, shared responsibility, and support within the development team, recognising the pressures of academic workloads and personal circumstances.
-
-This ethical analysis was informed by academic literature, professional ethical guidelines, and relevant legal frameworks.  
-The full ethical discussion, including IEEE-formatted references, has been shared with the team member responsible for compiling and submitting the final Sprint 1 PDF deliverable.
-
-## Sprint 2 — Design & Requirements Pack (Submission Evidence)
-
-Sprint 2 focuses on refining requirements and producing design artefacts to prepare for implementation in Sprint 3.  
-All Sprint 2 deliverables are stored in the repository under `docs/sprint2/` to support review and demonstration.
-
-### Use Case Diagram
-The Use Case Diagram illustrates the primary interactions between users and the StudyBuddy system. 
-It defines the core system functionalities, including user registration, authentication, profile management,
-searching for study buddies, and sending or accepting study requests. 
-This diagram helps clarify system boundaries and supports requirement validation for Sprint 2.
-
-### Activity Diagram – User Registration
-This activity diagram represents the workflow of the user registration process in the StudyBuddy system.
-It outlines the sequence of user actions and system responses, including input validation, duplicate email
-checks, error handling, and successful account creation. The diagram ensures that all possible execution
-paths are clearly defined and supports the functional requirements identified for Sprint 2.
-
-# Registration Flowchart
-
-This flowchart represents the control flow of the user registration process
-within the StudyBuddy system. It complements the activity diagram by focusing
-on decision points and validation logic rather than system behaviour.
-
-### Sprint 2 Artefacts (Links)
-- **Project Summary (refined):** `docs/sprint2/project-summary.md`
-- **Prioritised User Stories:** `docs/sprint2/user-stories.md`
-- **Use Case Diagram (UML):** `docs/sprint2/use-case-diagram.png`
-- **Wireframes:** `docs/sprint2/wireframes/`
-- **Activity Diagrams / Flowcharts:** `docs/sprint2/activity-diagrams/`
-- **Meeting Minutes:** `docs/sprint2/meeting-minutes/`
-- **Kanban Screenshot (Sprint evidence):** `docs/sprint2/screenshots/kanban-sprint2.png`
-
-### Project Management
-- **GitHub Project / Kanban Board:** Add the team board link here for the final report.
-- **Repository Link:** `https://github.com/Z23599848/StuddyBuddy`
-
----
-
-## Scope (Sprint 2 to Sprint 4 Implementation)
-
-### MVP Delivered
-The Minimum Viable Product (MVP) enables:
-1. Student registration and login
-2. Creation of a basic study profile (subject, availability, study preferences)
-3. Searching for study buddies based on compatibility criteria
-4. Sending and responding to study requests (accept/reject)
-5. Messaging accepted study buddies
-6. Rating completed study sessions
-
-### Out of Scope
-To maintain quality and a realistic Sprint 4 scope, the following remain out of scope:
-- Real-time WebSocket chat
-- Notifications and email verification
-- Advanced ML-based matching
-- Admin dashboard and moderation tooling
-
-### Non-Functional Requirements (NFRs)
-- **Security:** passwords are never stored in plain text; follow best practices for authentication and access control.
-- **Privacy:** user profile data is minimised and processed only for matching and collaboration.
-- **Reliability:** the system must run consistently across team members’ machines via Docker.
-- **Usability:** core flows (register/login/search/request) should require minimal steps and be easy to understand.
-
----
-
-## Repository Structure (Key Folders)
-
-```text
-docs/
-  sprint1/
-  sprint2/
-    project-summary.md
-    user-stories.md
-    use-case-diagram.png
-    wireframes/
-    activity-diagrams/
-    meeting-minutes/
-    screenshots/
-src/
-app/
-docker-compose.yml
-README.md
-```
-
-Design & Analysis (Sprint 2)
-
-1. Refined Project Description
-
-StudyBuddy is a collaborative web-based application designed to support university students in organising their study activities, discovering compatible study partners, and maintaining productive peer-to-peer learning relationships.
-Following Sprint 1 feedback, the project scope has been refined to prioritise core academic collaboration features before introducing optional social or wellbeing enhancements.
-
-The application focuses on:
-
-Secure user authentication
-
-Creation of personalised study profiles
-
-Searching and matching students based on shared academic interests
-
-Managing study requests in a controlled and ethical manner
-
-This refinement ensures a realistic and achievable scope while maintaining strong educational and social value.
-
-2. Functional Scope (Sprint 2 Focus)
-
-Sprint 2 concentrates on requirements analysis and system design, preparing the project for full implementation in Sprint 3.
-
-Key functional areas analysed in this sprint:
-
-User registration and authentication
-
-Study profile creation and editing
-
-Study buddy discovery
-
-Sending, accepting, or rejecting study requests
-
-These features are formally documented through user stories, use case diagrams, and activity flows.
-
-3. Ethical and Professional Design Considerations
-
-The system design explicitly considers ethical responsibilities associated with student data, online interactions, and inclusivity.
-
-Key considerations include:
-
-Privacy-by-design principles
-
-Minimal data collection
-
-User consent and transparency
-
-Prevention of misuse or harassment
-
-Accessibility and fair matching logic
-
-Ethical considerations identified in Sprint 1 directly inform the design decisions documented in this sprint.
-
-4. Artefacts Produced in Sprint 2
-
-The following design artefacts have been produced to support Sprint 3 development:
-
-Use Case Diagram
-
-User Stories
-
-Activity Diagrams / Flowcharts
-
-Initial data and interaction modelling
-
-Updated Kanban board with Sprint 2 tickets
-
-All artefacts are aligned with Agile and industry-standard software engineering practices.
-
+The repository includes an [Apache 2.0 license](LICENSE).
