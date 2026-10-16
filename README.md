@@ -82,7 +82,7 @@ This repository is used for group collaboration, version control, and sprint-bas
 
 Sprint 4 CI evidence is provided through `.github/workflows/ci.yml`.
 
-The workflow runs JavaScript syntax checks with `npm test`, checks production dependency security with `npm audit --omit=dev`, and verifies that the web image can be built with Docker.
+The workflow runs JavaScript syntax checks and availability validation tests with `npm test`, checks production dependency security with `npm audit --omit=dev`, and verifies that the web image can be built with Docker.
 
 ---
 
